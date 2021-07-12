@@ -1,6 +1,9 @@
+#nullable disable
+
 using System;
 using System.Linq;
 using System.Threading;
+using Jellyfin.Extensions;
 using MediaBrowser.Controller.Channels;
 using MediaBrowser.Controller.Configuration;
 using MediaBrowser.Controller.Entities;
@@ -50,7 +53,7 @@ namespace MediaBrowser.Controller.BaseItemManager
             var typeOptions = libraryOptions.GetTypeOptions(baseItem.GetType().Name);
             if (typeOptions != null)
             {
-                return typeOptions.MetadataFetchers.Contains(name, StringComparer.OrdinalIgnoreCase);
+                return typeOptions.MetadataFetchers.Contains(name.AsSpan(), StringComparison.OrdinalIgnoreCase);
             }
 
             if (!libraryOptions.EnableInternetProviders)
@@ -60,7 +63,7 @@ namespace MediaBrowser.Controller.BaseItemManager
 
             var itemConfig = _serverConfigurationManager.Configuration.MetadataOptions.FirstOrDefault(i => string.Equals(i.ItemType, GetType().Name, StringComparison.OrdinalIgnoreCase));
 
-            return itemConfig == null || !itemConfig.DisabledMetadataFetchers.Contains(name, StringComparer.OrdinalIgnoreCase);
+            return itemConfig == null || !itemConfig.DisabledMetadataFetchers.Contains(name.AsSpan(), StringComparison.OrdinalIgnoreCase);
         }
 
         /// <inheritdoc />
@@ -81,7 +84,7 @@ namespace MediaBrowser.Controller.BaseItemManager
             var typeOptions = libraryOptions.GetTypeOptions(baseItem.GetType().Name);
             if (typeOptions != null)
             {
-                return typeOptions.ImageFetchers.Contains(name, StringComparer.OrdinalIgnoreCase);
+                return typeOptions.ImageFetchers.Contains(name.AsSpan(), StringComparison.OrdinalIgnoreCase);
             }
 
             if (!libraryOptions.EnableInternetProviders)
@@ -91,7 +94,7 @@ namespace MediaBrowser.Controller.BaseItemManager
 
             var itemConfig = _serverConfigurationManager.Configuration.MetadataOptions.FirstOrDefault(i => string.Equals(i.ItemType, GetType().Name, StringComparison.OrdinalIgnoreCase));
 
-            return itemConfig == null || !itemConfig.DisabledImageFetchers.Contains(name, StringComparer.OrdinalIgnoreCase);
+            return itemConfig == null || !itemConfig.DisabledImageFetchers.Contains(name.AsSpan(), StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
